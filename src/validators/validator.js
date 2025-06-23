@@ -16,10 +16,10 @@ export const registerSchemaDoctor = object({
 
 export const loginSchema = object({
   username: string()
-    .min(6, "username ต้องมีความยาวอย่างต่ำ 6 ตัวอักษร")
+    .min(6, "username is invalid")
     .required("กรุณากรอก username"),
   password: string()
-    .min(6, "password ต้องมีความยาวอย่างต่ำ 6 ตัวอักษร")
+    .min(6, "password is invalid")
     .required("กรุณากรอก password"),
 });
 

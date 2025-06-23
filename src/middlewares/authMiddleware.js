@@ -1,4 +1,4 @@
-import {createError} from "../utils/createError.js";
+import { createError } from "../utils/createError.js";
 import jwt, { decode } from "jsonwebtoken";
 
 export const authCheckUser = (req, res, next) => {
@@ -9,17 +9,17 @@ export const authCheckUser = (req, res, next) => {
     }
     const token = header.split(" ")[1];
 
-    jwt.verify(token, process.env.SECRET, (error, decode));
-    if (error) {
-      createError(401, "Token is invalid");
-    }
-    req.user = decode
-    next()
+    jwt.verify(token, process.env.SECRET, (error, decode) => {
+      if (error) {
+        createError(401, "Token is Invalid!!!");
+      }
+      req.user = decode;
+      next();
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
-
 
 export const authCheckDoctor = (req, res, next) => {
   try {
@@ -29,13 +29,14 @@ export const authCheckDoctor = (req, res, next) => {
     }
     const token = header.split(" ")[1];
 
-    jwt.verify(token, process.env.SECRET, (error, decode));
-    if (error) {
-      createError(401, "Token is invalid");
-    }
-    req.doctor = decode
-    next()
+    jwt.verify(token, process.env.SECRET, (error, decode) => {
+      if (error) {
+        createError(401, "Token is Invalid!!!");
+      }
+      req.doctor = decode;
+      next();
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };

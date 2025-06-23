@@ -12,7 +12,7 @@ export const registerDoctor = async (req, res, next) => {
         username: username,
       },
     });
-    console.log("Alkleeeeeeeeee ", doctorUser);
+
     const hash = bcrypt.hashSync(password, 10);
     const result = await prisma.doctor.create({
       data: {
@@ -27,6 +27,7 @@ export const registerDoctor = async (req, res, next) => {
     }
     res.status(200).json({ message: "Register successfully" });
   } catch (error) {
+    createError(400, error);
     next(error);
   }
 };
@@ -34,7 +35,7 @@ export const registerDoctor = async (req, res, next) => {
 export const registerUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    console.log(req.body)
+    console.log(req.body);
     const users = await prisma.user.findUnique({
       where: {
         username: username,
@@ -52,7 +53,7 @@ export const registerUser = async (req, res, next) => {
     if (users) {
       createError(400, "username already exist");
     }
-     res.status(200).json({ message: "Register successfully" });
+    res.status(200).json({ message: "Register successfully" });
   } catch (error) {
     next(error);
   }
@@ -61,7 +62,7 @@ export const registerUser = async (req, res, next) => {
 export const loginDoctor = async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    console.log(req.body)
+    console.log(req.body);
     const doctorUser = await prisma.doctor.findFirst({
       where: {
         username,
@@ -71,18 +72,17 @@ export const loginDoctor = async (req, res, next) => {
       createError(400, "Doctor username is invalid");
     }
 
-    console.log(doctorUser)
+    console.log(doctorUser);
 
-    const checkPassword = bcrypt.compareSync(
-      password,
-      doctorUser.password
-    );
+    const checkPassword = bcrypt.compareSync(password, doctorUser.password);
     if (!checkPassword) {
       createError(400, "password doesn't match");
     }
 
     const payload = {
-      id: doctorUser.id, specialization: doctorUser.specialization
+      id: doctorUser.id,
+      username : doctorUser.username,
+      specialization: doctorUser.specialization,
     };
 
     const token = jwt.sign(payload, process.env.SECRET, {
@@ -107,20 +107,20 @@ export const loginUser = async (req, res, next) => {
         username,
       },
     });
+
+
     if (!user) {
       createError(400, "user is invalid");
     }
 
-    const checkPassword = bcrypt.compareSync(
-      password,
-      user.confirmPassword
-    );
+    const checkPassword = bcrypt.compareSync(password, user.password);
     if (!checkPassword) {
       createError(400, "user is invalid");
     }
 
     const payload = {
       id: user.id,
+      username: user.username
     };
 
     const token = jwt.sign(payload, process.env.SECRET, {
