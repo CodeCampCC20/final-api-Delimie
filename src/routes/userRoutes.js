@@ -28,9 +28,9 @@ router.patch("/health-records/:id", authCheckUser, updatedHealthRec);
 router.delete("/health-records/:id", authCheckUser, deleteHealthRec);
 
 // // Doctor Notes
-// router.post("/doctor-notes",authCheck)
-// router.get("/doctor-notes/my-notes",authCheck)
-// router.patch("/dortor-notes/:id",authCheck)
-// router.delete("/doctor-notes/:id",authCheck)
+// router.post("/doctor-notes",authCheckDoctor)
+// router.get("/doctor-notes/my-notes",authCheckDoctor)
+// router.patch("/dortor-notes/:id",authCheckDoctor)
+// router.delete("/doctor-notes/:id",authCheckDoctor)
 
 export default router;
